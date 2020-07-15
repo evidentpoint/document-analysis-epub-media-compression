@@ -1,10 +1,36 @@
 import argparse
 import os
 import shutil
+from PIL import Image
 
 
-def compress_image(file, quality):
-    pass
+def split_ext(name):
+    """ Return a file name split into name and extension. """
+    dotindex = name.find('.')
+    return name[:dotindex], name[dotindex:]  # asdf, .jpg
+
+
+def compress_image(name, quality):
+    """ Convert an image file to jpg and optimize it. """
+    pre, ext = split_ext(name)
+
+    if ext != '.jpg':  # convert to jpg because that is the most compact format
+
+        print('converting to jpg...')
+        outname = pre + '.jpg'
+        
+        with Image.open(name) as img:
+            jpgimg = img.convert('RGB')
+
+        # need to explicitly delete uncompressed file
+        os.remove(name)
+        
+    else:
+        img = Image.open(name)
+        jpgimg = img
+        outname = name
+
+    jpgimg.save(outname, optimize=True, quality=quality)
 
 
 def compress_audio(file, quality):
