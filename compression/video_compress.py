@@ -18,7 +18,10 @@ def get_bitrate(filename):
 
 
 def compress_video_bitrate(filename, bitrate):
-    '''compress video based on bitrate'''
+    '''
+    compress video based on bitrate
+    reasonable smallest bitrate (most compression) is 300 kbps
+    '''
 
     # ffmpeg cannot edit existing files in-place
     temp_name = 'placeholder.mp4'
@@ -30,7 +33,10 @@ def compress_video_bitrate(filename, bitrate):
 
 
 def compress_video_crf(filename, crf):
-    '''compress video based on constant rate factor https://slhck.info/video/2017/02/24/crf-guide.html'''
+    '''
+    compress video based on constant rate factor https://slhck.info/video/2017/02/24/crf-guide.html
+    reasonable max value (most compression) is 28
+    '''
 
     # ffmpeg cannot edit existing files in-place
     temp_name = 'placeholder.mp4'

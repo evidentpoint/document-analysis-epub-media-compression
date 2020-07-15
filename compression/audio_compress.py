@@ -3,7 +3,12 @@ import os
 
 
 def compress_audio_bitrate(filename, bitrate):
-    '''compress audio based on bitrate'''
+    '''
+    compress audio based on bitrate
+    reasonable smallest bitrate is 48 kbps
+    96 kbps is decent audio 
+    320 kbs is premium audio 
+    '''
 
     # ffmpeg cannot edit existing files in-place
     temp_name = 'placeholder.mp3'
