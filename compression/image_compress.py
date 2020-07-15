@@ -9,7 +9,7 @@ def split_ext(name):
     return name[:dotindex], name[dotindex:]  # asdf, .jpg
 
 
-def compress(name, quality):
+def compress_image(name, quality):
     pre, ext = split_ext(name)
     
     if ext != '.jpg':  # convert to jpg because that is the most compact format
@@ -31,4 +31,4 @@ def compress(name, quality):
     jpgimg.save(outname, optimize=True, quality=quality)
 
 
-compress(name, 90)  
+compress_image(name, 90)  
