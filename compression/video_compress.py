@@ -6,7 +6,7 @@ import os
 # and is one way to reduce video size.
 # Lots of code taken from https://stackoverflow.com/questions/3844430/how-to-get-the-duration-of-a-video-in-python.
 
-
+# maybe if the bitrate is below 300 kbps it's not worth compressing
 def get_bitrate(filename):
     result = subprocess.run(
         f'ffprobe -v error -show_entries format=bit_rate -of default=noprint_wrappers=1:nokey=1 {filename}', 
@@ -17,7 +17,8 @@ def get_bitrate(filename):
     return float(result.stdout)  # in bits/second
 
 
-def compress_video(filename, bitrate):
+def compress_video_bitrate(filename, bitrate):
+    '''compress video based on bitrate'''
 
     # ffmpeg cannot eddit existing files in-place
     temp_name = 'placeholder.mp4'
@@ -28,5 +29,16 @@ def compress_video(filename, bitrate):
     os.rename(temp_name, filename)
 
 
-print(get_bitrate('vid_test/random.mp4'))
-compress_video('vid_test/random.mp4', 128000)  # it's half the size now, but quality is bad
+def compress_video_crf(filename, crf):
+    '''compress video based on constant rate factor https://slhck.info/video/2017/02/24/crf-guide.html'''
+
+    # ffmpeg cannot eddit existing files in-place
+    temp_name = 'placeholder.mp4'
+    subprocess.run(
+        f'ffmpeg -i {filename} -vcodec libx265 -crf {crf} {temp_name}'
+    )
+    os.remove(filename)
+    os.rename(temp_name, filename)
+
+
+compress_video_crf('vid_test/random.mp4', 28)
