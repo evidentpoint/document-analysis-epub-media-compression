@@ -20,7 +20,7 @@ def get_bitrate(filename):
 def compress_video_bitrate(filename, bitrate):
     '''compress video based on bitrate'''
 
-    # ffmpeg cannot eddit existing files in-place
+    # ffmpeg cannot edit existing files in-place
     temp_name = 'placeholder.mp4'
     subprocess.run(
         f'ffmpeg -i {filename} -b:v {bitrate} {temp_name}'
@@ -32,7 +32,7 @@ def compress_video_bitrate(filename, bitrate):
 def compress_video_crf(filename, crf):
     '''compress video based on constant rate factor https://slhck.info/video/2017/02/24/crf-guide.html'''
 
-    # ffmpeg cannot eddit existing files in-place
+    # ffmpeg cannot edit existing files in-place
     temp_name = 'placeholder.mp4'
     subprocess.run(
         f'ffmpeg -i {filename} -vcodec libx265 -crf {crf} {temp_name}'
