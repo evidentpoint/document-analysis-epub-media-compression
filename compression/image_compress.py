@@ -1,8 +1,7 @@
 from PIL import Image
 import os 
 
-# this image has a size of 334 KB 
-name = r'C:\Users\Ben Smus\Evident_Point\da-epub-media-compression\compression\testimg\phone.png'
+name = r'C:\Users\Ben Smus\Evident_Point\da-epub-media-compression\compression\test_img\f0112-01.png'
 
 
 def split_ext(name):
@@ -29,10 +28,7 @@ def compress(name, quality):
         jpgimg = img
         outname = name
 
-    # don't forget that we can have 4 character file extensions
     jpgimg.save(outname, optimize=True, quality=quality)
 
 
-# compress 100 with optimize does not do anything (makes sense)
-# compress 90 reduces file size to 140 KB
-compress(name, 90)  # side by side comparison reveals no perceptible change!
+compress(name, 90)  
