@@ -16,26 +16,10 @@ def split_ext(name):
 
 
 def compress_image(name, quality):
-    """ Convert an image file to jpg and optimize it. """
-    pre, ext = split_ext(name)
-    
-    if ext != '.jpg':  # convert to jpg because that is the most compact format
+    """ Resave and optimize an image file. """
+    outname = name
 
-        # print('converting to jpg...')
-        outname = pre + '.jpg'
-
-        with Image.open(name) as img:
-            jpgimg = img.convert('RGB')
-
-        # need to explicitly delete uncompressed file
-        os.remove(name)
-
-    else:
-        img = Image.open(name)
-        jpgimg = img
-        outname = name
-
-    jpgimg.save(outname, optimize=True, quality=quality)
+    Image.open(name).save(outname, optimize=True, quality=quality)
 
 
 def compress_audio(filename, bitrate):
@@ -45,7 +29,7 @@ def compress_audio(filename, bitrate):
     96 kbps is decent audio 
     320 kbs is premium audio 
     '''
-    
+
     # ffmpeg cannot edit existing files in-place
     temp_name = os.path.join(os.path.dirname(filename), "placeholder.mp3")
     subprocess.run(
@@ -60,7 +44,7 @@ def compress_video(filename, crf):
     compress video based on constant rate factor https://slhck.info/video/2017/02/24/crf-guide.html
     reasonable max value (most compression) is 28
     '''
-    
+
     # ffmpeg cannot edit existing files in-place
     temp_name = os.path.join(os.path.dirname(filename), "placeholder.mp4")
     subprocess.run(
@@ -119,19 +103,26 @@ def extract_and_compress_media(dir, image_quality, audio_quality, video_quality)
 
 
 def main(image_quality, audio_quality, video_quality):
-    dir = input("Enter the path to a directory to process:\n")
-    dir = dir.replace("\"", "")
+    dir = input("Enter the path to a file or directory to process:\n").replace(
+        "\"", "")
 
-    if os.path.isdir(dir):
-        print("Running...")
+    while not os.path.isfile(dir) and not os.path.isdir(dir):
+        dir = input(
+            "Invalid path.\nEnter the path to a file or directory to process:\n").replace("\"", "")
+
+    print("Running...")
+
+    if os.path.isfile(dir):
+        extract_and_compress_media(
+            dir, image_quality, audio_quality, video_quality)
+    else:
         for root, _, files in os.walk(dir):
             for file in files:
                 if file.endswith(".epub"):
                     extract_and_compress_media(os.path.join(
                         root, file), image_quality, audio_quality, video_quality)
-        print("Done.")
-    else:
-        print("Invalid path.")
+
+    print("Done.")
 
 
 if __name__ == "__main__":
